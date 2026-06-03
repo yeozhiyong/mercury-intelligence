@@ -19,7 +19,7 @@ Five integrated layers, all production-deployed:
 | 1 | User Interface | Slack `/intel` + `/counsel` slash commands, web frontend |
 | 2 | Workflow Orchestration | n8n 8-node pipeline, scoring gate, Slack routing |
 | 3 | AI Research Engine | Multi-layer agent architecture — web search, agentic loop, BM25 RAG, MEDDPICC brief |
-| 4 | Decision Engine | 5 parallel agents + synthesizer, mental models, deal health verdict |
+| 4 | Decision Engine | 5 parallel agents + synthesizer, Charlie Munger mental models, deal health verdict |
 | 5 | AI Security | DefenseClaw — prompt injection protection, rate limiting, Splunk audit trail |
 
 → [Interactive architecture diagram](https://mercury-intelligence.pages.dev/assets/architecture-diagram.html)
