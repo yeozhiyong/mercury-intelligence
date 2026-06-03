@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercury Intelligence — System Architecture</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0D1117;
+      color: #E6EDF3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #6E7681;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #E6EDF3;
+      margin-bottom: 10px;
+    }
+    .header p {
+      font-size: 15px;
+      color: #8B949E;
+    }
+
+    /* ── Flow label ── */
+    .flow-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #484F58;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .flow-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #21262D;
+    }
+
+    /* ── Top row ── */
+    .top-row {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      flex: 1;
+      background: #161B22;
+      border: 1px solid #21262D;
+      border-radius: 12px;
+      padding: 24px 20px;
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .card-ui::before      { background: #A78BFA; }
+    .card-n8n::before     { background: #FBBF24; }
+    .card-research::before { background: #60A5FA; }
+    .card-decision::before { background: #C084FC; }
+    .card-gov::before     { background: #34D399; }
+
+    .card-ui:hover      { transform: translateY(-4px); border-color: rgba(167,139,250,0.3); box-shadow: 0 12px 40px rgba(167,139,250,0.08); }
+    .card-n8n:hover     { transform: translateY(-4px); border-color: rgba(251,191,36,0.3);  box-shadow: 0 12px 40px rgba(251,191,36,0.08); }
+    .card-research:hover { transform: translateY(-4px); border-color: rgba(96,165,250,0.3);  box-shadow: 0 12px 40px rgba(96,165,250,0.08); }
+    .card-decision:hover { transform: translateY(-4px); border-color: rgba(192,132,252,0.3); box-shadow: 0 12px 40px rgba(192,132,252,0.08); }
+    .card-gov:hover     { transform: translateY(-3px); border-color: rgba(52,211,153,0.3);  box-shadow: 0 12px 40px rgba(52,211,153,0.08); }
+
+    /* ── Arrow connectors ── */
+    .arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      flex-shrink: 0;
+      color: #30363D;
+    }
+
+    /* ── Card content ── */
+    .card-icon { font-size: 26px; margin-bottom: 14px; }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .card-ui .card-label      { color: #A78BFA; }
+    .card-n8n .card-label     { color: #FBBF24; }
+    .card-research .card-label { color: #60A5FA; }
+    .card-decision .card-label { color: #C084FC; }
+    .card-gov .card-label     { color: #34D399; }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #E6EDF3;
+      margin-bottom: 3px;
+      line-height: 1.3;
+    }
+    .card-sub {
+      font-size: 12px;
+      color: #6E7681;
+      margin-bottom: 16px;
+    }
+
+    .card-bullets {
+      list-style: none;
+      margin-bottom: 20px;
+    }
+    .card-bullets li {
+      font-size: 13px;
+      color: #C9D1D9;
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.4;
+    }
+    .card-bullets li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: #484F58;
+    }
+
+    code {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      background: #21262D;
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #E6EDF3;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: #21262D;
+      color: #8B949E;
+      border: 1px solid #30363D;
+    }
+
+    /* ── Governance bar ── */
+    .card-gov {
+      flex: none;
+      width: 100%;
+      padding: 20px 28px;
+    }
+    .gov-body {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .gov-left { flex-shrink: 0; }
+    .gov-left .card-sub { margin-bottom: 0; }
+    .gov-tags {
+      padding-top: 14px;
+      border-top: 1px solid #21262D;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .gov-bullets {
+      display: flex;
+      gap: 24px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+    .gov-bullet {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #C9D1D9;
+      white-space: nowrap;
+    }
+    .gov-bullet::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34D399;
+      flex-shrink: 0;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #484F58;
+    }
+    .footer a {
+      color: #6E7681;
+      text-decoration: none;
+    }
+    .footer a:hover { color: #8B949E; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="header">
+      <div class="header-eyebrow">System Architecture</div>
+      <h1>Mercury Intelligence</h1>
+      <p>Five integrated layers &nbsp;·&nbsp; Production-deployed &nbsp;·&nbsp; All requests audited end-to-end</p>
+    </div>
+
+    <div class="flow-label">Request flow</div>
+
+    <div class="top-row">
+
+      <!-- 1. User Interface -->
+      <div class="card card-ui">
+        <div class="card-icon">💬</div>
+        <div class="card-label">Interface</div>
+        <div class="card-name">User Interface</div>
+        <div class="card-sub">Entry points</div>
+        <ul class="card-bullets">
+          <li>Slack <code>/intel</code> command</li>
+          <li>Slack <code>/counsel</code> command</li>
+          <li>Web frontend — 5-tab demo</li>
+          <li>Route Lead trigger</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Slack</span>
+          <span class="tag">Cloudflare Pages</span>
+        </div>
+      </div>
+
+      <div class="arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- 2. Workflow Orchestration -->
+      <div class="card card-n8n">
+        <div class="card-icon">⚡</div>
+        <div class="card-label">Orchestration</div>
+        <div class="card-name">Workflow Engine</div>
+        <div class="card-sub">n8n — 8-node pipeline</div>
+        <ul class="card-bullets">
+          <li>Webhook ingestion</li>
+          <li>Scoring gate (≥7 = Hot Lead)</li>
+          <li>PDF brief generation</li>
+          <li>Slack thread routing</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">n8n</span>
+          <span class="tag">EC2</span>
+          <span class="tag">Webhooks</span>
+        </div>
+      </div>
+
+      <div class="arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- 3. AI Research Engine -->
+      <div class="card card-research">
+        <div class="card-icon">🔍</div>
+        <div class="card-label">Research</div>
+        <div class="card-name">AI Research Engine</div>
+        <div class="card-sub">Multi-layer agent architecture</div>
+        <ul class="card-bullets">
+          <li>L1: Direct reasoning</li>
+          <li>L2: Live web search (Tavily)</li>
+          <li>L3: Agentic research loop</li>
+          <li>L4: MEDDPICC + BM25 RAG</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Claude Sonnet</span>
+          <span class="tag">Flask</span>
+          <span class="tag">EC2</span>
+        </div>
+      </div>
+
+      <div class="arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <!-- 4. Decision Engine -->
+      <div class="card card-decision">
+        <div class="card-icon">🧠</div>
+        <div class="card-label">Decision</div>
+        <div class="card-name">Decision Engine</div>
+        <div class="card-sub">Block 3 — Munger mental models</div>
+        <ul class="card-bullets">
+          <li>5 parallel analytical agents</li>
+          <li>Gap · Inversion · Competitor</li>
+          <li>Stakeholder · First Principles</li>
+          <li>Synthesized deal health verdict</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">Claude Opus</span>
+          <span class="tag">Cloudflare Workers</span>
+        </div>
+      </div>
+
+    </div><!-- /top-row -->
+
+    <!-- 5. Governance bar -->
+    <div class="card card-gov">
+      <div class="gov-body">
+        <div class="gov-left">
+          <div class="card-label">AI Security</div>
+          <div class="card-name">Governance Layer</div>
+          <div class="card-sub">Full AI lifecycle — dev to runtime &nbsp;·&nbsp; all four stages feed Splunk</div>
+        </div>
+        <div class="gov-bullets">
+          <div class="gov-bullet">Dev-time: CodeGuard coding rules</div>
+          <div class="gov-bullet">CI on push: Skill Scanner</div>
+          <div class="gov-bullet">Deploy-time: MCP Scanner CVE audit</div>
+          <div class="gov-bullet">Runtime: DefenseClaw tool call governance</div>
+          <div class="gov-bullet">Unified Splunk audit trail</div>
+        </div>
+      </div>
+      <div class="gov-tags">
+        <span class="tag">CodeGuard</span>
+        <span class="tag">Skill Scanner</span>
+        <span class="tag">MCP Scanner</span>
+        <span class="tag">DefenseClaw</span>
+        <span class="tag">Splunk</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      Built by <a href="https://www.linkedin.com/in/yeozhiyong" target="_blank">Yeo Zhi Yong</a>
+    </div>
+
+  </div>
+</body>
+</html>
