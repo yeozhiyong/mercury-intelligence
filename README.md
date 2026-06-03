@@ -66,4 +66,4 @@ mercury-intelligence/
 
 ---
 
-Built by [Yeo Zhi Yong](https://www.linkedin.com/in/yeozhiyong)
+Built by [Yeo Zhi Yong](https://www.linkedin.com/in/zhiyongyeo/)
