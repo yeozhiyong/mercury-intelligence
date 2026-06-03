@@ -22,6 +22,8 @@ Five integrated layers, all production-deployed:
 | 4 | Decision Engine | 5 parallel Claude agents + synthesizer, Munger mental models, deal health verdict |
 | 5 | Governance & Audit | DefenseClaw — prompt injection protection, rate limiting, Splunk audit trail |
 
+→ [Interactive architecture diagram](https://mercury-intelligence.pages.dev/assets/architecture-diagram.html)
+
 ---
 
 ## Demo Outputs
@@ -32,7 +34,7 @@ Static showcase outputs for three fictional companies:
 - **Meridian Systems** — mid-market infrastructure, score 6/10 (Nurture)
 - **Crestline Technologies** — growth-stage SaaS, score 7/10 (Hot Lead)
 
-→ [View demo site](./demo/index.html)
+→ [View demo site](https://mercury-intelligence.pages.dev/demo/index.html)
 
 ---
 
