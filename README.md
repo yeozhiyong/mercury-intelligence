@@ -45,7 +45,7 @@ Static showcase outputs for three fictional companies:
 - **n8n** — workflow orchestration (8-node pipeline, scoring gate, Slack routing)
 - **Cloudflare Workers** — Block 3 Decision Engine (stateless, edge-deployed)
 - **Flask / EC2** — AI research API layer (Layers 1–4)
-- **Splunk** — governance and audit (DefenseClaw)
+- **Splunk** — AI security and audit (DefenseClaw)
 - **Tavily** — live web search
 - **Redis** — rate limiting across all API workers
 
@@ -56,7 +56,7 @@ Static showcase outputs for three fictional companies:
 ```
 mercury-intelligence/
 ├── demo/
-│   └── index.html                  # Static showcase — 3 fictional companies, Layer 4 + Block 3 outputs
+│   └── index.html                  # Static showcase — 3 fictional companies, MEDDPICC brief + Decision Engine outputs
 ├── assets/
 │   └── architecture-diagram.html  # Interactive 5-layer system architecture diagram
 └── README.md
