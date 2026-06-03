@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mercury Intelligence — Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font:     -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Arial, sans-serif;
+      --navy:     #1B2631;
+      --teal:     #00c2a8;
+      --teal-d:   #00a891;
+      --bg-page:  #edf2f7;
+      --bg-card:  #ffffff;
+      --text:     #2C3E50;
+      --text-2:   #5D6D7E;
+      --text-3:   #7F8C8D;
+      --bdr:      #E8ECF0;
+      --success:  #1a7a46;
+      --success-bg: #eafaf1;
+      --success-bdr: #2ECC71;
+      --warning:  #9a6500;
+      --warning-bg: #fef9e7;
+      --warning-bdr: #F39C12;
+      --danger:   #a93226;
+      --danger-bg: #fdedec;
+      --danger-bdr: #E74C3C;
+    }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Company selector strip ── */
+    .selector-strip {
+      background: #f0f4f8;
+      border-bottom: 1px solid #dce5ee;
+      padding: 10px 32px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .selector-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+    .company-btn {
+      background: white;
+      border: 1.5px solid #dce5ee;
+      border-radius: 20px;
+      color: var(--text-2);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 16px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .company-btn:hover { border-color: var(--teal); color: var(--teal-d); }
+    .company-btn.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: white;
+      font-weight: 600;
+    }
+    .selector-demo-tag {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-3);
+      background: white;
+      border: 1px solid #dce5ee;
+      border-radius: 4px;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
+
+    /* ── Report wrapper ── */
+    .wrap {
+      max-width: 860px;
+      margin: 24px auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      background: var(--navy);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .co-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .co-meta {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-top: 2px;
+    }
+    .top-bar-right {
+      text-align: right;
+    }
+    .gen-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+    .layer-tag {
+      font-size: 11px;
+      background: rgba(0,194,168,0.15);
+      border: 1px solid rgba(0,194,168,0.3);
+      color: var(--teal);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    /* ── Score hero ── */
+    .hero {
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .score-num {
+      font-size: 72px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .score-denom {
+      font-size: 28px;
+      color: #AAB7B8;
+    }
+    .score-right { flex: 1; min-width: 180px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border-width: 2px;
+      border-style: solid;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 5px 16px;
+      margin-bottom: 10px;
+    }
+    .score-label {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+    .prog-track {
+      background: #D5D8DC;
+      border-radius: 6px;
+      height: 10px;
+      width: 100%;
+      max-width: 280px;
+    }
+    .prog-fill {
+      height: 10px;
+      border-radius: 6px;
+    }
+
+    /* ── MEDDPICC ── */
+    .medd-wrap {
+      background: white;
+      border-top: 1px solid var(--bdr);
+      border-bottom: 1px solid var(--bdr);
+      padding: 24px 32px;
+    }
+    .medd-title {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 14px;
+    }
+    .medd-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .medd-cell {
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .medd-letter {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .medd-name {
+      font-size: 11px;
+      color: var(--text-2);
+      margin-bottom: 3px;
+    }
+    .medd-status {
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Content cards ── */
+    .card {
+      background: white;
+      border-top: 1px solid var(--bdr);
+      padding: 24px 32px;
+    }
+    .card:last-of-type { border-radius: 0 0 8px 8px; }
+    .section { margin-bottom: 20px; }
+    .section:last-child { margin-bottom: 0; }
+    h2 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--teal-d);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #EBF5FB;
+    }
+    p { font-size: 15px; color: var(--text); line-height: 1.65; }
+    ul { padding-left: 18px; }
+    ul li { font-size: 15px; color: var(--text); margin-bottom: 5px; line-height: 1.55; }
+
+    /* ── Report footer ── */
+    .report-footer {
+      background: var(--navy);
+      color: var(--text-3);
+      font-size: 12px;
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .report-footer a { color: var(--teal); text-decoration: none; }
+
+    /* ── Block 3 Counsel section ── */
+    .counsel-wrap {
+      max-width: 860px;
+      margin: 16px auto 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .counsel-header {
+      background: var(--navy);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .counsel-header-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .counsel-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+    }
+    .counsel-header-tag {
+      margin-left: auto;
+      font-size: 11px;
+      background: rgba(192,132,252,0.15);
+      border: 1px solid rgba(192,132,252,0.3);
+      color: #C084FC;
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+    .counsel-body {
+      background: white;
+      padding: 28px 32px;
+    }
+    .deal-health-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .deal-health-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+    .deal-health-badge {
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 20px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+    }
+    .counsel-headline {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+    .counsel-next-action {
+      background: #f0fdfb;
+      border: 1px solid rgba(0,194,168,0.25);
+      border-left: 4px solid var(--teal);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+    }
+    .counsel-next-action-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal-d);
+      margin-bottom: 6px;
+    }
+    .counsel-next-action p {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Agent accordion */
+    .agents-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 10px;
+    }
+    .agent-item {
+      border: 1px solid var(--bdr);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .agent-toggle {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font-family: var(--font);
+      transition: background 0.15s;
+    }
+    .agent-toggle:hover { background: #f8fafc; }
+    .agent-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+    .agent-icon {
+      font-size: 16px;
+    }
+    .agent-chevron {
+      font-size: 12px;
+      color: var(--text-3);
+      transition: transform 0.2s;
+    }
+    .agent-item.open .agent-chevron { transform: rotate(180deg); }
+    .agent-body {
+      display: none;
+      padding: 0 16px 14px 16px;
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6;
+      border-top: 1px solid var(--bdr);
+      padding-top: 12px;
+    }
+    .agent-item.open .agent-body { display: block; }
+
+    /* ── Page footer ── */
+    .page-footer {
+      max-width: 860px;
+      margin: 24px auto 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-footer-left {
+      font-size: 13px;
+      color: var(--text-3);
+    }
+    .page-footer-left a {
+      color: var(--teal-d);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .page-footer-left a:hover { text-decoration: underline; }
+    .arch-link {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--teal-d);
+      text-decoration: none;
+      border: 1.5px solid rgba(0,168,145,0.35);
+      border-radius: 6px;
+      padding: 7px 16px;
+      transition: all 0.15s;
+    }
+    .arch-link:hover {
+      background: rgba(0,194,168,0.06);
+      border-color: var(--teal);
+    }
+
+    @media (max-width: 600px) {
+      .top-bar, .hero, .card, .medd-wrap, .report-footer,
+      .counsel-header, .counsel-body { padding: 16px; }
+      .medd-grid { grid-template-columns: repeat(2, 1fr); }
+      .score-num { font-size: 56px; }
+      .hero { flex-direction: column; gap: 12px; }
+      .selector-strip { padding: 10px 16px; }
+      .wrap, .counsel-wrap { margin: 12px; border-radius: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Company selector -->
+<div class="selector-strip">
+  <span class="selector-label">Demo ·</span>
+  <button class="company-btn active" onclick="show('zantova', this)">Zantova Financial Group</button>
+  <button class="company-btn" onclick="show('meridian', this)">Meridian Systems</button>
+  <button class="company-btn" onclick="show('crestline', this)">Crestline Technologies</button>
+  <span class="selector-demo-tag">Fictional companies · Pre-generated outputs</span>
+</div>
+
+<!-- ═══════════════════════════════ ZANTOVA ═══════════════════════════════ -->
+<div id="zantova" class="company-view">
+  <div class="wrap">
+    <div class="top-bar">
+      <div>
+        <div class="brand">Mercury Intelligence</div>
+        <div class="co-name">Zantova Financial Group</div>
+        <div class="co-meta">Wealth Management · Singapore · ~2,100 employees</div>
+      </div>
+      <div class="top-bar-right">
+        <div class="gen-label">Layer 4 · Domain-Augmented Agent</div>
+        <div class="layer-tag">MEDDPICC Brief</div>
+      </div>
+    </div>
+
+    <div class="hero" style="background:#eafaf1; border-bottom:3px solid #2ECC71;">
+      <div>
+        <span class="score-num" style="color:#1a7a46;">8</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div class="score-right">
+        <div class="badge" style="border-color:#2ECC71; color:#1a7a46;">🔥 &nbsp;HOT LEAD</div>
+        <div class="score-label">MEDDPICC Qualification Score</div>
+        <div class="prog-track"><div class="prog-fill" style="width:80%; background:#2ECC71;"></div></div>
+      </div>
+    </div>
+
+    <div class="medd-wrap">
+      <div class="medd-title">MEDDPICC Qualification Breakdown</div>
+      <div class="medd-grid">
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">M</div>
+          <div class="medd-name">Metrics</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">E</div>
+          <div class="medd-name">Economic Buyer</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">D</div>
+          <div class="medd-name">Decision Criteria</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">D</div>
+          <div class="medd-name">Decision Process</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">I</div>
+          <div class="medd-name">Identify Pain</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">C</div>
+          <div class="medd-name">Champion</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">C</div>
+          <div class="medd-name">Competition</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section">
+        <h2>Overview</h2>
+        <p>Zantova Financial Group is a Singapore-headquartered wealth management firm managing $28B AUM across APJC. The firm is midway through a core banking modernisation programme under a hard MAS TRM compliance deadline in Q4 2026. A $12M digital transformation budget is pre-approved and in-cycle for H2 2026, with the CFO directly controlling the mandate.</p>
+      </div>
+      <div class="section">
+        <h2>⚡ Top Pain Points</h2>
+        <ul>
+          <li>Core banking modernisation stalled by compliance bottlenecks — three internal automation attempts failed in 18 months</li>
+          <li>MAS TRM deadline is non-negotiable; non-compliance risks operating licence review</li>
+          <li>60-day audit cycles must compress to 7 days — manual process costs $1.8M annually</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>💡 Opening Angles</h2>
+        <ul>
+          <li>MAS TRM compliance deadline creates genuine, non-negotiable urgency for Q4 2026</li>
+          <li>Post-acquisition integration of two regional banks creates significant upsell opportunity beyond initial compliance use case</li>
+          <li>CFO has previously approved infrastructure investment — established vendor trust exists</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>🎯 Strategic Fit</h2>
+        <ul>
+          <li>API-first architecture aligns with Zantova's core banking modernisation roadmap</li>
+          <li>APJC-based support density meets the mandatory SLA requirements</li>
+          <li>Financial services reference customers in Singapore address procurement risk concern</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Technology Priorities</h2>
+        <ul>
+          <li>Compliance automation and audit workflow compression (60-day → 7-day target)</li>
+          <li>API integration with existing core banking system — zero-customisation preferred</li>
+          <li>Zero-downtime deployment — 24/7 trading operations cannot be interrupted</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>⚠️ Watch Outs</h2>
+        <ul>
+          <li>Board sign-off required for deals above $2M — adds 30–45 days to close cycle</li>
+          <li>IBM has strong brand recognition with the Board; pre-empt reference check before it happens</li>
+          <li>CTO is unmapped — could be a blocker or accelerator before Q3 steering committee</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="report-footer">
+      <span>🛡 DefenseClaw: 14 tool calls scanned · No violations</span>
+      <span>Generated by Mercury Intelligence · Layer 4</span>
+    </div>
+  </div>
+
+  <div class="counsel-wrap">
+    <div class="counsel-header">
+      <div>
+        <div class="counsel-header-label">Mercury Counsel</div>
+        <div class="counsel-header-title">Block 3 — Decision Engine</div>
+      </div>
+      <div class="counsel-header-tag">5 agents · Claude Opus synthesis</div>
+    </div>
+    <div class="counsel-body">
+      <div class="deal-health-row">
+        <span class="deal-health-label">Deal Health</span>
+        <span class="deal-health-badge" style="background:#eafaf1; border:2px solid #2ECC71; color:#1a7a46;">🟢 &nbsp;Green</span>
+      </div>
+      <div class="counsel-headline">Champion has direct CFO access and budget is pre-approved — move to POC within 30 days.</div>
+      <div class="counsel-next-action">
+        <div class="counsel-next-action-label">Next Action</div>
+        <p>Schedule technical deep-dive with Marcus Lim and the compliance team. Bring a MAS TRM-certified financial services reference from Singapore. Lock in Q2 POC before IBM secures a site visit.</p>
+      </div>
+      <div class="agents-title">Agent Findings</div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔍</span>
+          <span class="agent-name">Gap Analyst</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Decision process timeline is the main gap — no formal RFP and the Q3 steering committee review could slip to Q4 if the POC isn't locked in Q2. The CTO is unmapped; this is the most significant qualification risk.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔄</span>
+          <span class="agent-name">Inverter</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Deal fails if IBM secures a Board-level reference site visit before we do, or if the CFO (8 months in role) loses confidence in the programme timeline due to a missed milestone. A stalled POC is as dangerous as no POC.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚔️</span>
+          <span class="agent-name">Competitor</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">IBM is the primary threat on brand recognition with the Board; local SI competes on price. Neither has demonstrated MAS TRM compliance delivery proof in Singapore. This is the differentiation wedge — lead with it.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🗺️</span>
+          <span class="agent-name">Stakeholder Power Map</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Marcus Lim is a strong champion with direct CFO access, but has not yet introduced the CFO directly. The CTO is unmapped and could be a blocker at the Q3 steering committee. Prioritise CTO qualification before the next milestone.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚡</span>
+          <span class="agent-name">First Principles</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">The single highest-leverage action is a reference call with a Singapore financial services firm that has passed MAS TRM audit. It removes procurement risk, counters IBM's brand advantage, and accelerates Board sign-off. Everything else is secondary.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ MERIDIAN ═══════════════════════════════ -->
+<div id="meridian" class="company-view" style="display:none;">
+  <div class="wrap">
+    <div class="top-bar">
+      <div>
+        <div class="brand">Mercury Intelligence</div>
+        <div class="co-name">Meridian Systems</div>
+        <div class="co-meta">IT Infrastructure · Managed Services · Sydney, Australia · ~450 employees</div>
+      </div>
+      <div class="top-bar-right">
+        <div class="gen-label">Layer 4 · Domain-Augmented Agent</div>
+        <div class="layer-tag">MEDDPICC Brief</div>
+      </div>
+    </div>
+
+    <div class="hero" style="background:#fef9e7; border-bottom:3px solid #F39C12;">
+      <div>
+        <span class="score-num" style="color:#9a6500;">6</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div class="score-right">
+        <div class="badge" style="border-color:#F39C12; color:#9a6500;">⭐ &nbsp;NURTURE LEAD</div>
+        <div class="score-label">MEDDPICC Qualification Score</div>
+        <div class="prog-track"><div class="prog-fill" style="width:60%; background:#F39C12;"></div></div>
+      </div>
+    </div>
+
+    <div class="medd-wrap">
+      <div class="medd-title">MEDDPICC Qualification Breakdown</div>
+      <div class="medd-grid">
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">M</div>
+          <div class="medd-name">Metrics</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">E</div>
+          <div class="medd-name">Economic Buyer</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">D</div>
+          <div class="medd-name">Decision Criteria</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+        <div class="medd-cell" style="background:#fdedec;">
+          <div class="medd-letter" style="color:#E74C3C;">D</div>
+          <div class="medd-name">Decision Process</div>
+          <div class="medd-status" style="color:#a93226;">Weak</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">I</div>
+          <div class="medd-name">Identify Pain</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">C</div>
+          <div class="medd-name">Champion</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">C</div>
+          <div class="medd-name">Competition</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section">
+        <h2>Overview</h2>
+        <p>Meridian Systems is a mid-market managed services provider headquartered in Sydney, delivering hybrid cloud infrastructure to enterprise clients across ANZ. The firm is experiencing accelerating customer churn driven by network visibility gaps and slow incident response. A new CTO with an AWS background joined six weeks ago, creating both significant risk and a narrow window of opportunity.</p>
+      </div>
+      <div class="section">
+        <h2>⚡ Top Pain Points</h2>
+        <ul>
+          <li>Network visibility gaps across hybrid cloud causing manual incident triage and SLA breaches</li>
+          <li>Lost 3 enterprise clients in 12 months — 12-hour average incident resolution time is the root cause</li>
+          <li>Unplanned downtime costs $380K annually — board-level concern with active churn risk</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>💡 Opening Angles</h2>
+        <ul>
+          <li>$380K annual downtime cost is a board-visible metric — ROI case is pre-built</li>
+          <li>New CTO is 6 weeks in and still forming vendor opinions — early engagement is critical</li>
+          <li>Existing ServiceNow environment creates a natural integration wedge</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>🎯 Strategic Fit</h2>
+        <ul>
+          <li>Network visibility capabilities directly address the core hybrid cloud gap</li>
+          <li>24/7 APAC support model meets mandatory SLA requirements for ANZ enterprise</li>
+          <li>TCO advantage vs AWS native tooling — especially on APAC support quality — is the primary differentiation</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Technology Priorities</h2>
+        <ul>
+          <li>Real-time network visibility across hybrid cloud — on-prem and AWS workloads</li>
+          <li>ServiceNow integration for automated incident triage and escalation</li>
+          <li>APAC 24/7 support with sub-30-minute escalation SLA</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>⚠️ Watch Outs</h2>
+        <ul>
+          <li>New CTO from AWS — likely has established account relationships with AWS sales team</li>
+          <li>Internal build vs buy debate ongoing — no decision to engage external vendors yet</li>
+          <li>Rachel Wong (champion) has limited executive influence — deal cannot progress without CTO engagement</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="report-footer">
+      <span>🛡 DefenseClaw: 11 tool calls scanned · No violations</span>
+      <span>Generated by Mercury Intelligence · Layer 4</span>
+    </div>
+  </div>
+
+  <div class="counsel-wrap">
+    <div class="counsel-header">
+      <div>
+        <div class="counsel-header-label">Mercury Counsel</div>
+        <div class="counsel-header-title">Block 3 — Decision Engine</div>
+      </div>
+      <div class="counsel-header-tag">5 agents · Claude Opus synthesis</div>
+    </div>
+    <div class="counsel-body">
+      <div class="deal-health-row">
+        <span class="deal-health-label">Deal Health</span>
+        <span class="deal-health-badge" style="background:#fef9e7; border:2px solid #F39C12; color:#9a6500;">🟡 &nbsp;Amber</span>
+      </div>
+      <div class="counsel-headline">New CTO from AWS is the defining risk — establish relationship before the AWS sales team does.</div>
+      <div class="counsel-next-action">
+        <div class="counsel-next-action-label">Next Action</div>
+        <p>Request an executive briefing with the new CTO within 2 weeks. Lead with a TCO comparison vs AWS native tooling — APAC support quality is the wedge. Do not let AWS get there first.</p>
+      </div>
+      <div class="agents-title">Agent Findings</div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔍</span>
+          <span class="agent-name">Gap Analyst</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Decision process is entirely undefined and economic buyer is unqualified. The deal cannot progress without direct CTO engagement. Rachel Wong cannot champion this alone — she needs an executive sponsor who doesn't yet exist in the account.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔄</span>
+          <span class="agent-name">Inverter</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Deal is lost if the AWS sales team gets to the new CTO before we do, or if the internal build option gets a budget allocation before an external vendor evaluation begins. Both failure modes have a sub-30-day window.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚔️</span>
+          <span class="agent-name">Competitor</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">AWS has a structural advantage via the new CTO's prior loyalty and institutional knowledge. The counter is TCO and APAC support quality — AWS native tooling support in ANZ is known to be weak, with long escalation paths. Lead with this.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🗺️</span>
+          <span class="agent-name">Stakeholder Power Map</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Rachel Wong is politically exposed with a new CTO in seat. Her influence over vendor selection is uncertain until the CTO establishes his operating model. Map the CTO's trusted advisors urgently — he almost certainly has pre-existing AWS account team relationships.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚡</span>
+          <span class="agent-name">First Principles</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">The highest-leverage action is a direct CTO meeting in the next 10 business days. A TCO analysis comparing AWS native vs enterprise alternative — focused on APAC support gap and downtime cost — is the door-opener. Everything else follows from whether that meeting happens.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CRESTLINE ═══════════════════════════════ -->
+<div id="crestline" class="company-view" style="display:none;">
+  <div class="wrap">
+    <div class="top-bar">
+      <div>
+        <div class="brand">Mercury Intelligence</div>
+        <div class="co-name">Crestline Technologies</div>
+        <div class="co-meta">B2B SaaS · HR Technology · Singapore · ~180 employees · Series B</div>
+      </div>
+      <div class="top-bar-right">
+        <div class="gen-label">Layer 4 · Domain-Augmented Agent</div>
+        <div class="layer-tag">MEDDPICC Brief</div>
+      </div>
+    </div>
+
+    <div class="hero" style="background:#eafaf1; border-bottom:3px solid #2ECC71;">
+      <div>
+        <span class="score-num" style="color:#1a7a46;">7</span>
+        <span class="score-denom">/10</span>
+      </div>
+      <div class="score-right">
+        <div class="badge" style="border-color:#2ECC71; color:#1a7a46;">🔥 &nbsp;HOT LEAD</div>
+        <div class="score-label">MEDDPICC Qualification Score</div>
+        <div class="prog-track"><div class="prog-fill" style="width:70%; background:#2ECC71;"></div></div>
+      </div>
+    </div>
+
+    <div class="medd-wrap">
+      <div class="medd-title">MEDDPICC Qualification Breakdown</div>
+      <div class="medd-grid">
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">M</div>
+          <div class="medd-name">Metrics</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">E</div>
+          <div class="medd-name">Economic Buyer</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">D</div>
+          <div class="medd-name">Decision Criteria</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">D</div>
+          <div class="medd-name">Decision Process</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">I</div>
+          <div class="medd-name">Identify Pain</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#eafaf1;">
+          <div class="medd-letter" style="color:#27AE60;">C</div>
+          <div class="medd-name">Champion</div>
+          <div class="medd-status" style="color:#1a7a46;">Strong</div>
+        </div>
+        <div class="medd-cell" style="background:#fef9e7;">
+          <div class="medd-letter" style="color:#F39C12;">C</div>
+          <div class="medd-name">Competition</div>
+          <div class="medd-status" style="color:#9a6500;">Partial</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section">
+        <h2>Overview</h2>
+        <p>Crestline Technologies is a Singapore-based Series B HR technology company with $45M raised, serving enterprise clients across APJC. The firm is losing 40% of enterprise prospects at the security due diligence stage — a directly quantified, board-tracked problem. The VC lead has mandated security investment as a condition of continued growth funding; the CEO has confirmed Q2 budget is open.</p>
+      </div>
+      <div class="section">
+        <h2>⚡ Top Pain Points</h2>
+        <ul>
+          <li>40% of enterprise deals lost at security due diligence — directly quantified, board-level visibility</li>
+          <li>CTO spending 30% of time on manual security reviews instead of product development</li>
+          <li>VC board has made security investment a condition of the next funding milestone</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>💡 Opening Angles</h2>
+        <ul>
+          <li>VC-mandated security spend with CEO alignment — budget is pre-approved and urgent</li>
+          <li>40% deal loss rate × $250K average ACV = recoverable revenue that is immediately quantifiable</li>
+          <li>IPO aspirations in 18–24 months make enterprise security posture strategically critical, not just tactical</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>🎯 Strategic Fit</h2>
+        <ul>
+          <li>SOC2 Type II pathway aligns directly with enterprise procurement requirements</li>
+          <li>Implementation under 90 days meets the Q3 enterprise pipeline capture target</li>
+          <li>High reference value — Series B security-first positioning is a strong APJC market signal</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Technology Priorities</h2>
+        <ul>
+          <li>SOC2 Type II audit trail, evidence collection, and certification pathway</li>
+          <li>Runtime security monitoring for SaaS application layer</li>
+          <li>Security questionnaire automation to reduce CTO review time from 30% to under 5%</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>⚠️ Watch Outs</h2>
+        <ul>
+          <li>Vanta (compliance automation) may expand scope to consolidate the purchase — differentiate clearly and early</li>
+          <li>Series B budget is defined but not unlimited — pricing sensitivity is real despite urgency</li>
+          <li>Fast-growing team means security posture must scale — implementation must be low-friction and ops-light</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="report-footer">
+      <span>🛡 DefenseClaw: 13 tool calls scanned · No violations</span>
+      <span>Generated by Mercury Intelligence · Layer 4</span>
+    </div>
+  </div>
+
+  <div class="counsel-wrap">
+    <div class="counsel-header">
+      <div>
+        <div class="counsel-header-label">Mercury Counsel</div>
+        <div class="counsel-header-title">Block 3 — Decision Engine</div>
+      </div>
+      <div class="counsel-header-tag">5 agents · Claude Opus synthesis</div>
+    </div>
+    <div class="counsel-body">
+      <div class="deal-health-row">
+        <span class="deal-health-label">Deal Health</span>
+        <span class="deal-health-badge" style="background:#eafaf1; border:2px solid #2ECC71; color:#1a7a46;">🟢 &nbsp;Green</span>
+      </div>
+      <div class="counsel-headline">VC-mandated security spend with CEO alignment — create urgency around the Q2 budget window closing.</div>
+      <div class="counsel-next-action">
+        <div class="counsel-next-action-label">Next Action</div>
+        <p>Fast-track a POC proposal this week. Quantify the 40% deal loss rate in dollar terms on page one. Position as enterprise readiness accelerator before the next VC funding milestone — not a cost centre.</p>
+      </div>
+      <div class="agents-title">Agent Findings</div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔍</span>
+          <span class="agent-name">Gap Analyst</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Competition mapping is incomplete — Vanta's potential scope expansion is the primary unquantified risk. Qualify the full scope of the Vanta proposal before the next meeting. If Vanta is pitching a consolidated security platform, the purchase decision changes significantly.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🔄</span>
+          <span class="agent-name">Inverter</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Deal fails if Vanta convinces the CTO that a single compliance platform covers all requirements, or if the Q2 budget window closes without a signed POC agreement. The budget window is real — Q3 budget cycles at Series B companies reset under VC scrutiny.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚔️</span>
+          <span class="agent-name">Competitor</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Vanta is a compliance tool, not a security posture tool — the differentiation is clear but must be made explicit in the proposal. Frame as complementary, not competitive, to avoid triggering a consolidation conversation. If Vanta is expanding scope, address it directly.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">🗺️</span>
+          <span class="agent-name">Stakeholder Power Map</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">CEO and CTO are aligned and accessible — unusually clean stakeholder map for a Series B. The VC board is the silent power centre driving urgency. Ensure proposal language maps to the VC investment thesis: enterprise readiness, revenue recovery, and IPO positioning.</div>
+      </div>
+      <div class="agent-item">
+        <button class="agent-toggle" onclick="toggleAgent(this)">
+          <span class="agent-icon">⚡</span>
+          <span class="agent-name">First Principles</span>
+          <span class="agent-chevron">▼</span>
+        </button>
+        <div class="agent-body">Highest-leverage action: quantify the revenue impact on page one. 40% enterprise deal loss rate × $250K average ACV = a specific dollar figure that frames the entire decision. Presenting a proposal without this number misses the most compelling argument available.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page footer -->
+<div class="page-footer">
+  <div class="page-footer-left">
+    Built by <a href="https://www.linkedin.com/in/yeozhiyong" target="_blank">Yeo Zhi Yong</a>
+    &nbsp;·&nbsp; Fictional companies · Demo data only
+  </div>
+  <a class="arch-link" href="../assets/architecture-diagram.html">System Architecture →</a>
+</div>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.company-view').forEach(v => v.style.display = 'none');
+    document.querySelectorAll('.company-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).style.display = 'block';
+    btn.classList.add('active');
+  }
+
+  function toggleAgent(btn) {
+    const item = btn.closest('.agent-item');
+    item.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
