@@ -38,30 +38,58 @@
       min-height: 100vh;
     }
 
-    /* ── Company selector strip ── */
+    /* ── Header / selector strip ── */
     .selector-strip {
-      background: #f0f4f8;
-      border-bottom: 1px solid #dce5ee;
-      padding: 10px 32px;
+      background: var(--navy);
+      padding: 0 32px;
+      height: 62px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 20px;
+      flex-wrap: nowrap;
     }
-    .selector-label {
-      font-size: 11px;
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .header-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+    .header-brand-text h1 {
+      font-size: 15px;
       font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-right: 4px;
-      white-space: nowrap;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+    .header-brand-text p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 1px;
+    }
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.12);
+      flex-shrink: 0;
     }
     .company-btn {
-      background: white;
-      border: 1.5px solid #dce5ee;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.18);
       border-radius: 20px;
-      color: var(--text-2);
+      color: rgba(255,255,255,0.6);
       cursor: pointer;
       font-family: var(--font);
       font-size: 13px;
@@ -70,22 +98,25 @@
       transition: all 0.15s;
       white-space: nowrap;
     }
-    .company-btn:hover { border-color: var(--teal); color: var(--teal-d); }
+    .company-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
     .company-btn.active {
       background: var(--teal);
       border-color: var(--teal);
-      color: white;
-      font-weight: 600;
+      color: var(--navy);
+      font-weight: 700;
     }
     .selector-demo-tag {
       margin-left: auto;
       font-size: 11px;
-      color: var(--text-3);
-      background: white;
-      border: 1px solid #dce5ee;
+      color: rgba(255,255,255,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 4px;
       padding: 3px 10px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* ── Report wrapper ── */
@@ -459,13 +490,20 @@
 </head>
 <body>
 
-<!-- Company selector -->
+<!-- Header / company selector -->
 <div class="selector-strip">
-  <span class="selector-label">Demo ·</span>
+  <div class="header-brand">
+    <div class="header-logo">MI</div>
+    <div class="header-brand-text">
+      <h1>Mercury Intelligence</h1>
+      <p>Sales Intelligence Bot</p>
+    </div>
+  </div>
+  <div class="header-divider"></div>
   <button class="company-btn active" onclick="show('zantova', this)">Zantova Financial Group</button>
   <button class="company-btn" onclick="show('meridian', this)">Meridian Systems</button>
   <button class="company-btn" onclick="show('crestline', this)">Crestline Technologies</button>
-  <span class="selector-demo-tag">Fictional companies · Pre-generated outputs</span>
+  <span class="selector-demo-tag">Demo · Fictional companies</span>
 </div>
 
 <!-- ═══════════════════════════════ ZANTOVA ═══════════════════════════════ -->
