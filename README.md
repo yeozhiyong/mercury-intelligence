@@ -57,8 +57,6 @@ Static showcase outputs for three fictional companies:
 mercury-intelligence/
 ├── demo/
 │   └── index.html                  # Static showcase — 3 fictional companies, Layer 4 + Block 3 outputs
-├── n8n/
-│   └── intel-slack-workflow.json   # Sanitised /intel Slack bot workflow (replace <placeholders>)
 ├── assets/
 │   └── architecture-diagram.html  # Interactive 5-layer system architecture diagram
 └── README.md
