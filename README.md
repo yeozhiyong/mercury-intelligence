@@ -40,15 +40,14 @@ Static showcase outputs for three fictional companies:
 
 ## Tech Stack
 
-- **Claude Sonnet** — research agents (Layers 1-4)
-- **Claude Opus** — decision synthesis (Block 3)
-- **n8n** — workflow orchestration
-- **Cloudflare Workers** — Block 3 Decision Engine
-- **Cloudflare Pages** — frontend
-- **Flask / EC2** — API layer
+- **Claude Sonnet** — research agents (multi-layer agentic architecture)
+- **Claude Opus** — decision synthesis (Block 3 Decision Engine)
+- **n8n** — workflow orchestration (8-node pipeline, scoring gate, Slack routing)
+- **Cloudflare Workers** — Block 3 Decision Engine (stateless, edge-deployed)
+- **Flask / EC2** — AI research API layer (Layers 1–4)
 - **Splunk** — governance and audit (DefenseClaw)
 - **Tavily** — live web search
-- **Redis** — rate limiting
+- **Redis** — rate limiting across all API workers
 
 ---
 
@@ -56,9 +55,12 @@ Static showcase outputs for three fictional companies:
 
 ```
 mercury-intelligence/
-├── demo/               # Static showcase site
-├── n8n/                # Sanitised n8n workflow export
-├── assets/             # Architecture diagrams, screenshots
+├── demo/
+│   └── index.html                  # Static showcase — 3 fictional companies, Layer 4 + Block 3 outputs
+├── n8n/
+│   └── intel-slack-workflow.json   # Sanitised /intel Slack bot workflow (replace <placeholders>)
+├── assets/
+│   └── architecture-diagram.html  # Interactive 5-layer system architecture diagram
 └── README.md
 ```
 
