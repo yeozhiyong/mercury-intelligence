@@ -508,7 +508,7 @@
   </div>
   <div class="header-divider"></div>
   <button class="company-btn active" onclick="show('zantova', this)">Zantova Financial Group</button>
-  <button class="company-btn" onclick="show('meridian', this)">Vantelo Logistics</button>
+  <button class="company-btn" onclick="show('vantelo', this)">Vantelo Logistics</button>
 
   <span class="selector-demo-tag">Demo · Fictional companies</span>
 </div>
@@ -697,7 +697,7 @@
 </div>
 
 <!-- VANTELO LOGISTICS -->
-<div id="meridian" class="company-view" style="display:none;">
+<div id="vantelo" class="company-view" style="display:none;">
   <div class="wrap">
     <div class="top-bar">
       <div>
@@ -890,11 +890,25 @@
 
 <script>
   function show(id, btn) {
-    document.querySelectorAll('.company-view').forEach(v => v.style.display = 'none');
-    document.querySelectorAll('.company-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).style.display = 'block';
-    btn.classList.add('active');
+    document.querySelectorAll('.company-view').forEach(function(v){ v.style.display = 'none'; });
+    document.querySelectorAll('.company-btn').forEach(function(b){ b.classList.remove('active'); });
+    var view = document.getElementById(id);
+    if (view) view.style.display = 'block';
+    var activeBtn = btn;
+    if (!activeBtn) {
+      document.querySelectorAll('.company-btn').forEach(function(b){
+        var oc = b.getAttribute('onclick') || '';
+        if (oc.indexOf("'" + id + "'") !== -1) activeBtn = b;
+      });
+    }
+    if (activeBtn) activeBtn.classList.add('active');
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
   }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    var id = (location.hash || '').replace('#', '').toLowerCase();
+    if (id && document.getElementById(id)) show(id, null);
+  });
 
   function toggleAgent(btn) {
     const item = btn.closest('.agent-item');
