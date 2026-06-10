@@ -4,7 +4,7 @@
 
 ## What It Does
 
-Mercury Intelligence researches any company and produces a structured MEDDICC sales brief, routes it by deal score, and generates a multi-framework strategic recommendation — all triggered by a Slack slash command.
+Mercury Intelligence researches any company and produces a structured MEDDPICC sales brief, routes it by deal score, and generates a multi-framework strategic recommendation — all triggered by a Slack slash command.
 
 **Live demo available on request.**
 
@@ -18,7 +18,7 @@ Five integrated layers, all production-deployed:
 |---|---|---|
 | 1 | User Interface | Slack `/intel` + `/counsel` slash commands, web frontend |
 | 2 | Workflow Orchestration | n8n 8-node pipeline, scoring gate, Slack routing |
-| 3 | AI Research Engine | Multi-layer agent architecture — web search, agentic loop, BM25 RAG, MEDDICC brief |
+| 3 | AI Research Engine | Multi-layer agent architecture — web search, agentic loop, BM25 RAG, MEDDPICC brief |
 | 4 | Decision Engine | 5 parallel agents + synthesizer, Charlie Munger mental models, deal health verdict |
 | 5 | AI Security | DefenseClaw — prompt injection protection, rate limiting, Splunk audit trail |
 
@@ -55,7 +55,7 @@ Static showcase outputs for two fictional companies:
 ```
 mercury-intelligence/
 ├── demo/
-│   └── index.html                  # Static showcase — 2 fictional companies, MEDDICC brief + Decision Engine outputs
+│   └── index.html                  # Static showcase — 2 fictional companies, MEDDPICC brief + Decision Engine outputs
 ├── assets/
 │   └── architecture-diagram.html  # Interactive 5-layer system architecture diagram
 └── README.md
