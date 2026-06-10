@@ -28,11 +28,10 @@ Five integrated layers, all production-deployed:
 
 ## Demo Outputs
 
-Static showcase outputs for three fictional companies:
+Static showcase outputs for two fictional companies:
 
-- **Zantova Financial Group** — enterprise fintech, score 8/10 (Hot Lead)
-- **Meridian Systems** — mid-market infrastructure, score 6/10 (Nurture)
-- **Crestline Technologies** — growth-stage SaaS, score 7/10 (Hot Lead)
+- **Zantova Financial Group** — wealth management (Singapore), score 8/10 (Hot Lead)
+- **Vantelo Logistics** — 3PL / freight forwarding (Singapore), score 6/10 (Nurture)
 
 → [View demo site](https://mercury-intelligence.pages.dev/demo/index.html)
 
@@ -56,7 +55,7 @@ Static showcase outputs for three fictional companies:
 ```
 mercury-intelligence/
 ├── demo/
-│   └── index.html                  # Static showcase — 3 fictional companies, MEDDICC brief + Decision Engine outputs
+│   └── index.html                  # Static showcase — 2 fictional companies, MEDDICC brief + Decision Engine outputs
 ├── assets/
 │   └── architecture-diagram.html  # Interactive 5-layer system architecture diagram
 └── README.md
