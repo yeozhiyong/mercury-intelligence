@@ -20,7 +20,7 @@ Five integrated layers, all production-deployed:
 | 2 | Workflow Orchestration | n8n 8-node pipeline, scoring gate, Slack routing |
 | 3 | AI Research Engine | Multi-layer agent architecture — web search, agentic loop, BM25 RAG, MEDDPICC brief |
 | 4 | Decision Engine | 5 parallel agents + synthesizer, Charlie Munger mental models, deal health verdict |
-| 5 | AI Security | DefenseClaw — prompt injection protection, rate limiting, Splunk audit trail |
+| 5 | AI Security | Runtime guardrail on DefenseClaw's open-source rule packs — prompt-injection blocking (enforce mode), rate limiting, Splunk audit trail |
 
 → [Interactive architecture diagram](https://mercury-intelligence.pages.dev/assets/architecture-diagram.html)
 
@@ -44,7 +44,7 @@ Static showcase outputs for two fictional companies:
 - **n8n** — workflow orchestration (8-node pipeline, scoring gate, Slack routing)
 - **Cloudflare Workers** — Block 3 Decision Engine (stateless, edge-deployed)
 - **Flask / EC2** — AI research API layer (Layers 1–4)
-- **Splunk** — AI security and audit (DefenseClaw)
+- **Splunk** — AI security and audit (guardrail on DefenseClaw rule packs)
 - **Tavily** — live web search
 - **Redis** — rate limiting across all API workers
 
